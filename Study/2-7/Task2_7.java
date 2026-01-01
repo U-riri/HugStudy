@@ -23,12 +23,13 @@ public class Task2_7 {
         *   2番目の要素に 「もも」 を代入
         *   3番目の要素に 「ぶどう」 を代入
         */
-        country[0]= "りんご";
-        country[1]= "もも";
-        country[2]= "ぶどう";
+       String[] strArray = new String[3];
+        strArray[0]= "りんご";
+        strArray[1]= "もも";
+        strArray[2]= "ぶどう";
 
        // ④ ③で作成した配列の3番目の要素を出力しなさい。
-        System.out.println(country[2]);
+        System.out.println(strArray[2]);
 
         /* ⑤下記の処理について、何をしているのかコメントを記入して下さい。
         *  [イント型の配列intArrayの宣言をし、10,20,30,40,50で初期化する。]
