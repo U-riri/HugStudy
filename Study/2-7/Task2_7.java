@@ -32,7 +32,7 @@ public class Task2_7 {
         System.out.println(strArray[2]);
 
         /* ⑤下記の処理について、何をしているのかコメントを記入して下さい。
-        *  [イント型の配列intArrayの宣言をし、10,20,30,40,50で初期化する。]
+        *  [int型の配列intArrayの宣言をし、10,20,30,40,50で初期化する。]
         */
         int[] intArray = { 10, 20, 30, 40, 50 };
 
