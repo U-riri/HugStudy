@@ -38,13 +38,13 @@ public class Task2_10 {
         */
         
         
-        for (int k = 5; k <= 9; k++) {
+        for (int j = 5; j <= 9; j++) {
             // 行の最初に「段数」と「||」を追加
-            System.out.print(k + " || ");
+            System.out.print(j + " || ");
 
             // １つの段を表示
-            for (int j = 1; j <= 9; j++) {
-            System.out.print((k * j) + " | ");
+            for (int k = 1; k <= 9; k++) {
+            System.out.print((j * k) + " | ");
             }
 
             // １つの段を表示し終わったところで、改行する
