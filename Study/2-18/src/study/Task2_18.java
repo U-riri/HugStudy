@@ -1,4 +1,4 @@
-package person;
+package study;
 
     public class Task2_18 {
         public static void main(String[] args) {
