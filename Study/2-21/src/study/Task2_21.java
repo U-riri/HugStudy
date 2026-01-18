@@ -21,28 +21,28 @@ public class Task2_21 {
         // ① 変数名fruitsArrayListのデータ型StringでArrayListを宣言し、
         // 変数orange、grape、apple、pearの値を順に格納して下さい。
         ArrayList<String> fruitsArrayList = new ArrayList<>();
-        fruitsArrayList.add(apple);   // りんご
-        fruitsArrayList.add(grape);   // ぶどう
-        fruitsArrayList.add(pear);    // 梨
-        fruitsArrayList.add(orange);  // オレンジ
+        fruitsArrayList.add(orange);// オレンジ
+        fruitsArrayList.add(grape);// ぶどう
+        fruitsArrayList.add(apple);// りんご
+        fruitsArrayList.add(pear);// 梨
 
         // ② 変数名fruitsHashMapのHashMapを宣言（データ型　キーはString、値はInteger）し、
         // キーにはfruitsArrayListに格納した値を格納し、
         // 値にはオレンジは150円、ぶどうは120円、りんごは180円、梨は140円を格納して下さい。
         // 値は数値のみで単位の円は入れないでください。
-        HashMap<String, Integer> fruitsHashMap = new HashMap<>();
-        fruitsHashMap.put(orange, 150);
-        fruitsHashMap.put(grape, 120);
-        fruitsHashMap.put(apple, 180);
-        fruitsHashMap.put(pear, 140);
+        HashMap<String, Integer> fruitsHashMap = new HashMap<String, Integer>();
+        fruitsHashMap.put(fruitsArrayList.get(0), 150); // オレンジ
+        fruitsHashMap.put(fruitsArrayList.get(1), 120); // ぶどう
+        fruitsHashMap.put(fruitsArrayList.get(2), 180); // りんご
+        fruitsHashMap.put(fruitsArrayList.get(3), 140); // 梨
 
         // ③ オレンジの値段を200円に上書きしてください。
-        fruitsHashMap.put(orange, 200);
+        fruitsHashMap.replace(fruitsArrayList.get(0), 200);
 
         // ④ レッスン内容を参考に拡張for文を使い、
         // 実行結果がターミナルと同じように表示されるよう出力して下さい。
-        for (String fruit : fruitsArrayList) {
-            System.out.println(fruit + "の値段は" + fruitsHashMap.get(fruit) + "です。");
+        for (String key : fruitsHashMap.keySet()) {
+            System.out.println(key + "の値段は" + fruitsHashMap.get(key) + "です。");
         }
 
     }
