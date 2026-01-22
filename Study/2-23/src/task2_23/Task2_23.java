@@ -41,9 +41,10 @@ public class Task2_23 {
         //⑤「〇〇が△△を学んでいます」という表示で山田さん、石谷さんが何を学んでいるか出力して下さい。
         
         //ここに解答
-        System.out.println(yamada.getName() + "は、" + yamada.getLanguage() + "を学んでいます");
-        System.out.println(ishitani.getName() + "は、" + ishitani.getLanguage() + "を学んでいます");
-
+      //⑤ personsを使用して出力
+        for (Person person : persons) {
+            System.out.println(person.getName() + "は、" + person.getLanguage() + "を学んでいます");
+        }
 
     }
 
