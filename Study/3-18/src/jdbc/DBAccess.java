@@ -1,3 +1,5 @@
+package jdbc;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -6,19 +8,21 @@ import java.sql.Statement;
 
 /**
  * ■ データベースに接続するプログラム
- * データベースに接続し、テーブルの内容を変更する処理。
  *
- * 問①〜問⑥までを回答し、データベースと接続してみましょう。
+ * カリキュラム「JDBCドライバ」を参考に
+ * JDBCドライブのjarファイルの設置とビルドパスの追加も忘れないようにしましょう。
+ *
+ * 問①〜問④までを回答し、データベースと接続してみましょう。
  * カリキュラム「データベースを扱うための準備」を参考にして下さい。
  *
  * 実行結果の提出に関しては、
  * いつも通りソースをコミットしていただきますが、
  * 今回は実行結果のスクリーンショットも合わせて提出していただきます。
- * 画像名はDBUpdate.pngとして、3-18フォルダの中に入れ、これまでと同様に提出して下さい。
+ * 画像名はDBAccess.pngとして、3-18フォルダの中に入れ、これまでと同様に提出して下さい。
  *
  */
 
-public class DBUpdate {
+public class DBAccess {
 
     /** ドライバーのクラス名 */
     private static final String POSTGRES_DRIVER = "org.postgresql.Driver";
@@ -26,11 +30,11 @@ public class DBUpdate {
     // 問① データベースのホスト名・データベース名を定数にしなさい。
     private static final String JDBC_CONNECTION =
             "jdbc:postgresql://localhost/jdbc_db";
-    
-    /** ・ユーザー名 */
-    // 問② データベースのユーザー名を定数にしなさい
-    private static final String USER ="postgres";
 
+    /** ・ユーザー名 */
+    // 問② データベースのユーザー名を定数にしなさい。
+    private static final String USER ="postgres";
+            
     /** ・パスワード */
     // 問③ データベースのパスワードを定数にしなさい。
     private static final String PASS ="postgres";
@@ -49,15 +53,8 @@ public class DBUpdate {
 
             statement = connection.createStatement();
 
-            // 問⑤ SHOHIN_IDが020のSHOHIN_NAMEを「商品20」に変更するためのSQL文を記述しましょう。
-            String SQL = "UPDATE SHOHIN_TB SET SHOHIN_NAME = '商品20' WHERE SHOHIN_ID = '020'";
-
-            // 問⑥ 上記のSQL文を実行するための文を記述しましょう。
-            statement.executeUpdate(SQL);
-
-            //一覧表示
-            String SQLselect = "SELECT * FROM SHOHIN_TB";
-            resultSet = statement.executeQuery(SQLselect);
+            String SQL = "SELECT * FROM SHOHIN_TB";
+            resultSet = statement.executeQuery(SQL);
 
             while (resultSet.next()) {
                 String column1 = resultSet.getString("SHOHIN_ID");
@@ -69,16 +66,19 @@ public class DBUpdate {
                 System.out.println(column3);
             }
 
-        // forName()で例外発生
+            // forName()で例外発生
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
 
-        // getConnection()、createStatement()、executeQuery()で例外発生
+            // getConnection()、createStatement()、executeQuery()で例外発生
         } catch (SQLException e) {
             e.printStackTrace();
 
         } finally {
             try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
                 if (statement != null) {
                     statement.close();
                 }
@@ -88,6 +88,7 @@ public class DBUpdate {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+
             }
         }
     }
