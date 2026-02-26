@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="common/layout :: layout(~{::title}, ~{::section}, ~{::scripts})">
+
+<title>過去の履歴</title>
+
+<section class="history-page">
+
+    <h1>過去の履歴</h1>
+
+    <div class="container">
+        <div class="edit-card">
+
+            <!-- ---------------------------------------------------------
+                 過去の全データ一覧
+                 ・DailyRecordService.findAll() で取得した records を表示
+                 ・日付は曜日つきでフォーマット
+                 ・編集ボタンは from='history' を付与して戻り先を保持
+               --------------------------------------------------------- -->
+            <table class="weekly-table">
+                <tr>
+                    <th>日付</th>
+                    <th>ニュース</th>
+                    <th>いいこと・できたこと</th>
+                    <th>気分</th>
+                    <th>編集</th>
+                </tr>
+
+                <!-- 1件ずつ表示 -->
+                <tr th:each="rec : ${records}">
+                    <td th:text="${#temporals.format(rec.recordDate, 'yyyy-MM-dd (E)')}"></td>
+                    <td th:text="${rec.news}"></td>
+                    <td th:text="${rec.goodThing}"></td>
+
+                    <!-- 気分アイコン表示 -->
+                    <td th:switch="${rec.mood}">
+                        <span th:case="'happy'">😊 良い</span>
+                        <span th:case="'neutral'">😐 普通</span>
+                        <span th:case="'sad'">😢 いまいち</span>
+                        <span th:case="*">-</span>
+                    </td>
+
+                    <!-- 編集画面へ遷移（戻り先を history に固定） -->
+                    <td>
+                        <a th:href="@{'/edit/' + ${rec.id}(from='history')}" class="save-btn">
+                            編集
+                        </a>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- ダッシュボードへ戻る -->
+            <div class="back-link">
+                <a th:href="@{/dashboard}">戻る</a>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- ---------------------------------------------------------
+     layout.html の scripts 引数を満たすための空ブロック
+     （このページでは追加スクリプトは不要）
+   --------------------------------------------------------- -->
+<th:block th:fragment="scripts">
+    <!-- 現在このページでは追加スクリプトは不要 -->
+</th:block>
+
+</html>

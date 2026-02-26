@@ -1,0 +1,225 @@
+/* =========================================================
+   全体レイアウト（背景・フォント・基本余白）
+   ========================================================= */
+body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN",
+                 "Hiragino Sans", Meiryo, sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------------------------------------------------------
+   ページ全体の横幅（デフォルトは広めの 1500px）
+   ダッシュボードなどの横並びレイアウトに対応
+   --------------------------------------------------------- */
+.container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   入力フォーム画面（add / edit）専用の幅調整
+   ・600px に固定して、左右に大きな余白を作る
+   ・心理的に「書きやすい」幅にするためのデザイン
+   --------------------------------------------------------- */
+.form-page .container {
+    max-width: 600px !important;
+}
+
+/* ---------------------------------------------------------
+   履歴画面（history）専用の幅調整
+   ・1000px に制限して見やすい一覧にする
+   --------------------------------------------------------- */
+.history-page .container {
+    max-width: 1000px !important;
+}
+
+/* =========================================================
+   タイトル
+   ========================================================= */
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* =========================================================
+   カードデザイン（白背景のボックス）
+   ========================================================= */
+.edit-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+/* =========================================================
+   フォーム（入力欄の基本デザイン）
+   ========================================================= */
+form {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 15px;
+}
+
+input[type="text"], textarea, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   エラーメッセージ（バリデーション）
+   ========================================================= */
+.error {
+    color: #d9534f;
+    font-size: 0.9em;
+    margin-top: 6px;
+    font-weight: bold;
+}
+
+/* =========================================================
+   ボタン（保存・削除）
+   ========================================================= */
+.save-btn, .delete-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    text-align: center;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.save-btn { background: #4CAF50; color: white; }
+.save-btn:hover { opacity: 0.85; }
+
+.delete-btn { background: #d9534f; color: white; }
+.delete-btn:hover { opacity: 0.85; }
+
+/* =========================================================
+   週次テーブル（dashboard / history / index）
+   ========================================================= */
+.weekly-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+    table-layout: fixed;
+}
+
+.weekly-table th, .weekly-table td {
+    padding: 18px 10px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+/* 列幅の調整（見やすさのため固定） */
+.weekly-table th:nth-child(1), .weekly-table td:nth-child(1) {
+    width: 115px;
+    white-space: nowrap;
+}
+.weekly-table th:nth-child(4), .weekly-table td:nth-child(4) {
+    width: 95px;
+    text-align: center;
+    white-space: nowrap;
+}
+.weekly-table th:nth-child(5), .weekly-table td:nth-child(5) {
+    width: 85px;
+    text-align: right;
+    padding-right: 15px;
+}
+
+/* テーブル内の編集ボタン（小さめ） */
+.weekly-table .save-btn {
+    display: inline-block;
+    width: auto;
+    padding: 8px 16px;
+    font-size: 13px;
+    margin-top: 0;
+}
+
+/* =========================================================
+   Dashboard 専用レイアウト（左右2カラム）
+   ========================================================= */
+.dashboard-container {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    align-items: flex-start;
+}
+
+.dashboard-container > .edit-card:first-child {
+    flex: 0 0 450px; /* 左側：今日の日記 */
+}
+
+.dashboard-container > .edit-card:last-child {
+    flex: 1; /* 右側：一週間のまとめ */
+}
+
+/* =========================================================
+   戻るリンク
+   ========================================================= */
+.back-link {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.back-link a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* =========================================================
+   日付入力（add / edit）専用の横並び調整
+   ========================================================= */
+.form-page .edit-card .form-group .date-wrapper {
+    width: 160px;
+    flex-shrink: 0;
+}
+
+.date-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    width: fit-content;
+}
+
+.date-wrapper {
+    width: 100%;
+}
+
+.date-wrapper input[type="text"] {
+    width: 100%;
+}

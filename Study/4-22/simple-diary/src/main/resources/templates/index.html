@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="common/layout :: layout(~{::title}, ~{::section}, ~{::scripts})">
+
+<!-- ---------------------------------------------------------
+     【開発者用】基本 CRUD 一覧画面（/index）
+     ・アプリ開発の初期段階で作成した全件一覧ページ
+     ・最終的なユーザー向け一覧は /history に統一
+     ・データ確認・動作検証のために残している画面
+   --------------------------------------------------------- -->
+
+<title>【開発者用】日記一覧</title>
+
+<section class="developer-page">
+
+    <h1>【開発者用】日記一覧（全件表示）</h1>
+
+    <!-- ---------------------------------------------------------
+         新規登録ボタン（開発者用）
+         ・ユーザー向け画面（dashboard / history）とは別に、
+           CRUD の動作確認用として残している導線
+       --------------------------------------------------------- -->
+    <a th:href="@{/add}" class="save-btn"
+       style="display:inline-block; text-decoration:none; width:auto; padding:8px 12px; margin-bottom: 15px;">
+        新規登録
+    </a>
+
+    <!-- ---------------------------------------------------------
+         全件一覧テーブル
+         ・/history はユーザー向けデザイン
+         ・index.html は開発者がデータを一目で確認しやすいよう、
+           シンプルな構造を維持している
+       --------------------------------------------------------- -->
+    <table class="weekly-table">
+        <tr>
+            <th>ID</th>
+            <th>日付</th>
+            <th>ニュース</th>
+            <th>良かったこと</th>
+            <th>気分</th>
+            <th>編集</th>
+            <th>削除</th>
+        </tr>
+
+        <tr th:each="record : ${records}">
+            <td th:text="${record.id}"></td>
+
+            <!-- 曜日つき日付表示（他画面と統一） -->
+            <td th:text="${#temporals.format(record.recordDate, 'yyyy-MM-dd (E)')}"></td>
+
+            <td th:text="${record.news}"></td>
+            <td th:text="${record.goodThing}"></td>
+
+            <!-- 気分アイコン表示（dashboard / history と同じ表現） -->
+            <td th:switch="${record.mood}">
+                <span th:case="'happy'">😊 良い</span>
+                <span th:case="'neutral'">😐 普通</span>
+                <span th:case="'sad'">😢 いまいち</span>
+                <span th:case="*">-</span>
+            </td>
+
+            <!-- 編集ボタン（開発者用） -->
+            <td>
+                <a th:href="@{'/edit/' + ${record.id}}" class="save-btn"
+                   style="padding:6px 10px; font-size:13px; text-decoration:none;">
+                    編集
+                </a>
+            </td>
+
+            <!-- 削除ボタン（開発者用） -->
+            <td>
+                <form th:action="@{'/delete/' + ${record.id}}" method="post"
+                      onsubmit="return confirm('本当に削除しますか？');">
+                    <button type="submit" class="delete-btn"
+                            style="padding:6px 10px; font-size:13px;">
+                        削除
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+</section>
+
+<!-- layout.html の scripts 引数を満たすための空ブロック -->
+<th:block th:fragment="scripts">
+    <!-- このページでは追加スクリプトは不要 -->
+</th:block>
+
+</html>

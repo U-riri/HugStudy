@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(title, content, scripts)">
+
+<!-- ---------------------------------------------------------
+     共通レイアウト（全ページで使用）
+     ・title   … 各ページの <title> タグを差し込む
+     ・content … ページ固有の HTML セクションを差し込む
+     ・scripts … ページ固有の JavaScript を差し込む
+     
+     Thymeleaf のレイアウト機能を使うことで、
+     全ページのデザイン・構造を統一し、保守性を高めている。
+   --------------------------------------------------------- -->
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- ページごとのタイトルを差し込む -->
+    <title th:replace="${title}">MemoLog</title>
+
+    <!-- 共通スタイルシート（全ページで使用） -->
+    <link rel="stylesheet" th:href="@{/css/edit.css}">
+</head>
+
+<body>
+
+    <!-- ---------------------------------------------------------
+         ページ固有のコンテンツをここに挿入
+         例：
+         ・dashboard.html（今日＋一週間のまとめ）
+         ・add.html（新規登録）
+         ・edit.html（編集）
+         ・history.html（履歴一覧）
+         ・index.html（開発者用一覧）
+       --------------------------------------------------------- -->
+    <div class="container">
+        <div th:replace="${content}"></div>
+    </div>
+
+    <!-- ---------------------------------------------------------
+         ページ固有の script を挿入する領域
+         ・add/edit では flatpickr や曜日表示 JS をここに渡す
+         ・history/index など JS 不要なページは空ブロックを渡す
+         layout.html が scripts を受け取ることで、
+         ページごとの追加 JS を柔軟に管理できる
+       --------------------------------------------------------- -->
+    <div th:replace="${scripts}"></div>
+
+</body>
+
+</html>

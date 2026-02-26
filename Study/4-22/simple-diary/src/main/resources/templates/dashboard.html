@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="common/layout :: layout(~{::title}, ~{::section}, ~{::scripts})">
+
+<title>MemoLog</title>
+
+<section class="dashboard">
+
+    <h1>MemoLog ～今日の点が、明日の線になる。～</h1>
+
+    <div class="dashboard-container">
+
+        <!-- ---------------------------------------------------------
+             左側：今日の日記
+             ・今日の日付に一致するデータを表示
+             ・存在しない場合は「まだありません」と案内
+           --------------------------------------------------------- -->
+        <div class="edit-card">
+
+            <h2>今日の日記</h2>
+
+            <!-- 今日の記録がある場合 -->
+            <div th:if="${today != null}">
+                <div class="form-group">
+                    <label>日付</label>
+                    <div th:text="${#temporals.format(today.recordDate, 'yyyy-MM-dd (E)')}"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>今日のニュース</label>
+                    <div th:text="${today.news}"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>今日のいいこと・できたこと</label>
+                    <div th:text="${today.goodThing}"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>今日の気分</label>
+                    <div th:switch="${today.mood}">
+                        <span th:case="'happy'">😊 良い</span>
+                        <span th:case="'neutral'">😐 普通</span>
+                        <span th:case="'sad'">😢 いまいち</span>
+                        <span th:case="*">未設定</span>
+                    </div>
+                </div>
+
+                <!-- 編集画面へ -->
+                <a th:href="@{'/edit/' + ${today.id}}" class="save-btn">編集する</a>
+            </div>
+
+            <!-- 今日の記録がない場合 -->
+            <div th:if="${today == null}">
+                <p>まだ今日の日記がありません。</p>
+                <a th:href="@{/add}" class="save-btn">今日の日記を書く</a>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------------------------
+             右側：一週間のまとめ
+             ・直近 7 日間の記録を表示
+             ・データがない場合は「データがありません」と表示
+           --------------------------------------------------------- -->
+        <div class="edit-card">
+            <h2>一週間のまとめ</h2>
+
+            <!-- weeklyRecords が空でない場合のみ期間を表示 -->
+            <div th:if="${#lists.size(weeklyRecords) > 0}">
+                <span th:text="${#temporals.format(weeklyRecords[0].recordDate, 'yyyy-MM-dd (E)')}"></span>
+                〜
+                <span th:text="${#temporals.format(weeklyRecords[weeklyRecords.size()-1].recordDate, 'yyyy-MM-dd (E)')}"></span>
+            </div>
+
+            <!-- weeklyRecords が空の場合 -->
+            <div th:if="${#lists.size(weeklyRecords) == 0}">
+                <span>データがありません</span>
+            </div>
+
+            <!-- 一週間分のテーブル -->
+            <table class="weekly-table" th:if="${#lists.size(weeklyRecords) > 0}">
+                <tr>
+                    <th>日付</th>
+                    <th>ニュース</th>
+                    <th>いいこと・できたこと</th>
+                    <th>気分</th>
+                </tr>
+
+                <tr th:each="rec : ${weeklyRecords}">
+                    <td th:text="${#temporals.format(rec.recordDate, 'yyyy-MM-dd (E)')}"></td>
+                    <td th:text="${rec.news}"></td>
+                    <td th:text="${rec.goodThing}"></td>
+
+                    <td th:switch="${rec.mood}">
+                        <span th:case="'happy'">😊 良い</span>
+                        <span th:case="'neutral'">😐 普通</span>
+                        <span th:case="'sad'">😢 いまいち</span>
+                        <span th:case="*">-</span>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- 履歴画面へのリンク -->
+            <div style="margin-top: 20px; text-align: right;">
+                <a th:href="@{/history}" class="save-btn" style="width: auto; display: inline-block; padding: 8px 20px;">
+                    過去の履歴を見る
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- dashboard 用の追加スクリプト（現在はなし） -->
+<th:block th:fragment="scripts">
+    <!-- 現在は特にスクリプトなし -->
+</th:block>
+
+</html>

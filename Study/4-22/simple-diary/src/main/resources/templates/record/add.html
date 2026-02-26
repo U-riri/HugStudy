@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="common/layout :: layout(~{::title}, ~{::section}, ~{::scripts})">
+
+<title>日記を追加</title>
+
+<section class="form-page">
+
+    <h1>今日の日記を書く</h1>
+
+    <div class="container">
+        <div class="edit-card">
+
+            <!-- ---------------------------------------------------------
+                 新規登録フォーム
+                 ・DailyRecordForm を th:object で受け取る
+                 ・バリデーションエラー時は同じ画面に戻る
+               --------------------------------------------------------- -->
+            <form th:action="@{/add}" th:object="${dailyRecordForm}" method="post">
+
+                <!-- ---------------------------------------------------------
+                     日付入力
+                     ・input[type=text] + flatpickr で日付を選択
+                     ・曜日表示は JS で動的に更新
+                   --------------------------------------------------------- -->
+                <div class="form-group">
+                    <label>日付</label>
+
+                    <div class="date-row">
+
+                        <div class="date-wrapper">
+                            <input
+                                type="text"
+                                id="recordDateInput"
+                                th:field="*{recordDate}"
+                                placeholder="YYYY-MM-DD">
+                        </div>
+
+                        <!-- 曜日表示（JS が自動で更新） -->
+                        <span id="weekdayDisplay"></span>
+                    </div>
+
+                    <!-- バリデーションエラー表示 -->
+                    <div th:if="${#fields.hasErrors('recordDate')}" th:errors="*{recordDate}" class="error"></div>
+                </div>
+
+                <!-- 今日のニュース -->
+                <div class="form-group">
+                    <label>今日のニュース(２０文字以内)</label>
+                    <textarea th:field="*{news}" rows="2"></textarea>
+                    <div th:if="${#fields.hasErrors('news')}" th:errors="*{news}" class="error"></div>
+                </div>
+
+                <!-- 今日のいいこと・できたこと -->
+                <div class="form-group">
+                    <label>今日のいいこと・できたこと(２０文字以内)</label>
+                    <textarea th:field="*{goodThing}" rows="3"></textarea>
+                    <div th:if="${#fields.hasErrors('goodThing')}" th:errors="*{goodThing}" class="error"></div>
+                </div>
+
+                <!-- 今日の気分 -->
+                <div class="form-group">
+                    <label>今日の気分</label>
+                    <select th:field="*{mood}">
+                        <option value="">選択してください</option>
+                        <option value="happy">😊 良い</option>
+                        <option value="neutral">😐 普通</option>
+                        <option value="sad">😢 いまいち</option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('mood')}" th:errors="*{mood}" class="error"></div>
+                </div>
+
+                <button type="submit" class="save-btn">保存する</button>
+
+            </form>
+
+            <!-- ダッシュボードへ戻る -->
+            <div class="back-link">
+                <a th:href="@{/dashboard}">戻る</a>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- ---------------------------------------------------------
+     scripts ブロック（layout.html に渡される）
+     ・flatpickr の初期化
+     ・曜日表示の更新処理
+   --------------------------------------------------------- -->
+<th:block th:fragment="scripts">
+
+    <!-- flatpickr 読み込み -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // 日付入力欄に flatpickr を適用
+            flatpickr("#recordDateInput", {
+                dateFormat: "Y-m-d",
+                allowInput: true
+            });
+
+            const input = document.getElementById("recordDateInput");
+            const weekdaySpan = document.getElementById("weekdayDisplay");
+
+            // 入力変更時に曜日を更新
+            input.addEventListener("input", function () {
+                updateWeekday(this.value);
+            });
+
+            // 初期表示時にも曜日を反映（編集画面と同じ仕様）
+            if (input.value) {
+                updateWeekday(input.value);
+            }
+
+            // 曜日更新関数
+            function updateWeekday(value) {
+                const date = new Date(value);
+                if (!isNaN(date)) {
+                    const weekdays = ["(日)", "(月)", "(火)", "(水)", "(木)", "(金)", "(土)"];
+                    weekdaySpan.textContent = weekdays[date.getDay()];
+                } else {
+                    weekdaySpan.textContent = "";
+                }
+            }
+        });
+    </script>
+
+</th:block>
+
+</html>

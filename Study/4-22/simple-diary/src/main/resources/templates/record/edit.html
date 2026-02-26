@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="common/layout :: layout(~{::title}, ~{::section}, ~{::scripts})">
+
+<title>日記を編集</title>
+
+<section class="form-page">
+
+    <h1>日記を編集</h1>
+
+    <div class="container">
+        <div class="edit-card">
+
+            <!-- ---------------------------------------------------------
+                 編集フォーム
+                 ・DailyRecordForm を th:object で受け取る
+                 ・戻り先（dashboard / history）は backTo に保持
+                 ・POST 先は /edit/{id}?from=xxx
+               --------------------------------------------------------- -->
+            <form th:action="@{'/edit/' + ${dailyRecordForm.id}(from=${backTo})}"
+                  th:object="${dailyRecordForm}" method="post">
+
+                <!-- ---------------------------------------------------------
+                     日付入力
+                     ・add.html と同じ構造
+                     ・flatpickr + JS で曜日表示
+                   --------------------------------------------------------- -->
+                <div class="form-group">
+                    <label>日付</label>
+
+                    <div class="date-row">
+
+                        <div class="date-wrapper">
+                            <input
+                                type="text"
+                                id="recordDateInput"
+                                th:field="*{recordDate}"
+                                placeholder="YYYY-MM-DD">
+                        </div>
+
+                        <!-- 曜日表示（JS が自動で更新） -->
+                        <span id="weekdayDisplay"></span>
+                    </div>
+
+                    <!-- バリデーションエラー表示 -->
+                    <div th:if="${#fields.hasErrors('recordDate')}" th:errors="*{recordDate}" class="error"></div>
+                </div>
+
+                <!-- 今日のニュース -->
+                <div class="form-group">
+                    <label>今日のニュース(２０文字以内)</label>
+                    <textarea th:field="*{news}" rows="2"></textarea>
+                    <div th:if="${#fields.hasErrors('news')}" th:errors="*{news}" class="error"></div>
+                </div>
+
+                <!-- 今日のいいこと・できたこと -->
+                <div class="form-group">
+                    <label>今日のいいこと・できたこと(２０文字以内)</label>
+                    <textarea th:field="*{goodThing}" rows="3"></textarea>
+                    <div th:if="${#fields.hasErrors('goodThing')}" th:errors="*{goodThing}" class="error"></div>
+                </div>
+
+                <!-- 今日の気分 -->
+                <div class="form-group">
+                    <label>今日の気分</label>
+                    <select th:field="*{mood}">
+                        <option value="">選択してください</option>
+                        <option value="happy">😊 良い</option>
+                        <option value="neutral">😐 普通</option>
+                        <option value="sad">😢 いまいち</option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('mood')}" th:errors="*{mood}" class="error"></div>
+                </div>
+
+                <button type="submit" class="save-btn">更新する</button>
+            </form>
+
+            <!-- ---------------------------------------------------------
+                 削除ボタン
+                 ・POST /delete/{id}
+                 ・戻り先（dashboard / history）を hidden で保持
+               --------------------------------------------------------- -->
+            <form th:action="@{'/delete/' + ${dailyRecordForm.id}}" method="post">
+                <input type="hidden" name="from" th:value="${backTo}">
+                <button type="submit" class="delete-btn"
+                        onclick="return confirm('本当に削除しますか？');">
+                    削除する
+                </button>
+            </form>
+
+            <!-- 戻るリンク（dashboard または history） -->
+            <div class="back-link">
+                <a th:href="@{ '/' + ${backTo} }">戻る</a>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- ---------------------------------------------------------
+     scripts ブロック（layout.html に渡される）
+     ・flatpickr の初期化
+     ・曜日表示の更新処理（add.html と共通化）
+   --------------------------------------------------------- -->
+<th:block th:fragment="scripts">
+
+    <!-- flatpickr 読み込み -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // 日付入力欄に flatpickr を適用
+            flatpickr("#recordDateInput", {
+                dateFormat: "Y-m-d",
+                allowInput: true
+            });
+
+            const input = document.getElementById("recordDateInput");
+            const weekdaySpan = document.getElementById("weekdayDisplay");
+
+            // 曜日更新関数（add.html と統一）
+            function updateWeekday(value) {
+                const date = new Date(value);
+                if (!isNaN(date)) {
+                    const weekdays = ["(日)", "(月)", "(火)", "(水)", "(木)", "(金)", "(土)"];
+                    weekdaySpan.textContent = weekdays[date.getDay()];
+                } else {
+                    weekdaySpan.textContent = "";
+                }
+            }
+
+            // 初期表示（既存データの曜日を表示）
+            if (input.value) {
+                updateWeekday(input.value);
+            }
+
+            // 入力変更時に曜日を更新
+            input.addEventListener("input", function () {
+                updateWeekday(this.value);
+            });
+        });
+    </script>
+
+</th:block>
+
+</html>
